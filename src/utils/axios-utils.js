@@ -1,15 +1,15 @@
-import axios from 'axios'
+import axios from "axios";
 
-const client = axios.create({ baseURL: 'http://localhost:4000' })
+const client = axios.create({ baseURL: "http://localhost:4000" });
 
 export const request = ({ ...options }) => {
-  client.defaults.headers.common.Authorization = `Bearer token`
+  client.defaults.headers.common.Authorization = `Bearer token`;
 
-  const onSuccess = response => response
-  const onError = error => {
+  const onSuccess = (response) => response;
+  const onError = (error) => {
     // optionaly catch errors and add additional logging here
-    return error
-  }
+    return error;
+  };
 
-  return client(options).then(onSuccess).catch(onError)
-}
+  return client(options).then(onSuccess).catch(onError);
+};
