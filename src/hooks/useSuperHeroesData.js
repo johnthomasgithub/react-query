@@ -1,30 +1,31 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from "react-query";
 // import axios from 'axios'
-import { request } from '../utils/axios-utils'
+import { request } from "../utils/axios-utils";
 
 const fetchSuperHeroes = () => {
   // return axios.get('http://localhost:4000/superheroes')
-  return request({ url: '/superheroes' })
-}
+  return request({ url: "/superheroes" });
+};
 
-export const useSuperHeroesData = (onSuccess, onError) => {
-  return useQuery('super-heroes', fetchSuperHeroes, {
+export const useSuperHeroesData = (onSuccess, onError, cache) => {
+  return useQuery("super-heroes", fetchSuperHeroes, {
     onSuccess,
-    onError
+    onError,
+    staleTime: cache,
     // select: data => {
     //   const superHeroNames = data.data.map(hero => hero.name)
     //   return superHeroNames
     // }
-  })
-}
+  });
+};
 
-const addSuperHero = hero => {
+const addSuperHero = (hero) => {
   // return axios.post('http://localhost:4000/superheroes', hero)
-  return request({ url: '/superheroes', method: 'post', data: hero })
-}
+  return request({ url: "/superheroes", method: "post", data: hero });
+};
 
 export const useAddSuperHeroData = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation(addSuperHero, {
     // onSuccess: data => {
@@ -42,26 +43,26 @@ export const useAddSuperHeroData = () => {
     //   /** Handling Mutation Response Start */
     // },
     /**Optimistic Update Start */
-    onMutate: async newHero => {
-      await queryClient.cancelQueries('super-heroes')
-      const previousHeroData = queryClient.getQueryData('super-heroes')
-      queryClient.setQueryData('super-heroes', oldQueryData => {
+    onMutate: async (newHero) => {
+      await queryClient.cancelQueries("super-heroes");
+      const previousHeroData = queryClient.getQueryData("super-heroes");
+      queryClient.setQueryData("super-heroes", (oldQueryData) => {
         return {
           ...oldQueryData,
           data: [
             ...oldQueryData.data,
-            { id: oldQueryData?.data?.length + 1, ...newHero }
-          ]
-        }
-      })
-      return { previousHeroData }
+            { id: oldQueryData?.data?.length + 1, ...newHero },
+          ],
+        };
+      });
+      return { previousHeroData };
     },
     onError: (_err, _newTodo, context) => {
-      queryClient.setQueryData('super-heroes', context.previousHeroData)
+      queryClient.setQueryData("super-heroes", context.previousHeroData);
     },
     onSettled: () => {
-      queryClient.invalidateQueries('super-heroes')
-    }
+      queryClient.invalidateQueries("super-heroes");
+    },
     /**Optimistic Update End */
-  })
-}
+  });
+};
