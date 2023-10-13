@@ -18,7 +18,7 @@ export const RQSuperHeroesPage = () => {
   };
 
   const { isLoading, data, isError, error, refetch, isFetching } =
-    useSuperHeroesData(onSuccess, onError, 30000);
+    useSuperHeroesData(onSuccess, onError);
 
   console.log(isLoading, isFetching);
 

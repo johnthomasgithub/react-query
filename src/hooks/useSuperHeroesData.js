@@ -7,11 +7,11 @@ const fetchSuperHeroes = () => {
   return request({ url: "/superheroes" });
 };
 
-export const useSuperHeroesData = (onSuccess, onError, cache) => {
+export const useSuperHeroesData = (onSuccess, onError) => {
   return useQuery("super-heroes", fetchSuperHeroes, {
     onSuccess,
     onError,
-    staleTime: cache,
+    enabled: false,
     // select: data => {
     //   const superHeroNames = data.data.map(hero => hero.name)
     //   return superHeroNames
