@@ -11,7 +11,6 @@ export const RQSuperHeroesPage = () => {
 
   const onSuccess = (data) => {
     console.log({ data });
-    console.log("success");
   };
 
   const onError = (error) => {
